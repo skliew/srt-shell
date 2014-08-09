@@ -2,7 +2,10 @@ require File.join(File.dirname(__FILE__), 'helper')
 
 describe SRT::Shell do
   before do
-    @app = SRT::Shell.new
+    @app = SRT::Shell.new(
+      File.dirname(__FILE__) + '/fixtures/sample.srt',
+      File.dirname(__FILE__) + '/fixtures/save_hook'
+    )
   end
 
   it "should return a SRT::Shell" do
@@ -20,10 +23,6 @@ describe SRT::Shell do
   end
 
   describe "With a loaded SRT file" do
-    before do
-      @app.load_path(File.dirname(__FILE__) + '/fixtures/sample.srt')
-    end
-
     it "should show a line" do
       expect(STDOUT).to receive(:puts).with(
         "1\n00:03:55,339 --> 00:03:57,236\nI had the craziest dream last night.\n\n"
@@ -90,6 +89,11 @@ I was dancing the White Swan.
 OUT
       )
       @app.eval_command('search dancing')
+    end
+
+    it "should save and trigger its hook" do
+      expect(STDOUT).to receive(:puts).with("Saved\n")
+      @app.save
     end
   end
 end

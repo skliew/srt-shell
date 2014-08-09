@@ -4,7 +4,8 @@ require 'srt/patches'
 
 module SRT
   class Shell
-      USAGE_MSG = <<USAGE
+    SAVE_HOOK_FILE = ::File.expand_path('~/.srt_shell_hook')
+    USAGE_MSG = <<USAGE
 Usage: #{$0} [SRT_FILENAME]
     Commands:
         EX: load 'SRT_FILENAME'
@@ -19,10 +20,11 @@ Usage: #{$0} [SRT_FILENAME]
         EX: exit
 USAGE
 
-    def initialize(path = nil)
+    def initialize(path = nil, save_hook=SAVE_HOOK_FILE)
       @file = nil
       @path = nil
       load_path(path) if path
+      @save_hook = ::File.exists?(save_hook) ? save_hook : nil
     end
 
     def load_path(path)
@@ -104,6 +106,10 @@ USAGE
     def save(path=@path)
       ::File.open(path, 'w') do |f|
         f.print @file.to_s.split("\n").join("\r\n"), "\r\n\r\n"
+      end
+      if @save_hook
+        output = `sh #{@save_hook}`
+        puts output unless output.empty?
       end
     end
 
