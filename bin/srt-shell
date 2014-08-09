@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'srt/shell'
+require 'readline'
+
+WORDS = %w( load interval upshift u forward f remove save show s search help h exit )
+DEFAULT_WORD_BREAK_CHARS = " \t\n\"\\'`@$><=;|&{("
+FILENAME_WORD_BREAK_CHARS = "\t\n\"\\'`@$><=;|&{"
+
+Readline.completion_proc = lambda do |word|
+  Readline.completer_word_break_characters = DEFAULT_WORD_BREAK_CHARS
+  buffer = Readline.line_buffer.chomp
+
+  if buffer.match(/^\s*load\s+/)
+    Readline.completer_word_break_characters = FILENAME_WORD_BREAK_CHARS
+    return Readline::FILENAME_COMPLETION_PROC.call(word)
+  end
+
+  return [] if WORDS.find { |w| buffer.match(/^\s*#{w}\s+/) }
+  WORDS.grep(/^#{Regexp.escape(word)}/)
+end
+
+shell = SRT::Shell.new(ARGV[0])
+
+loop do
+  line = Readline.readline('> ', true)
+  shell.eval_command(line.chomp)
+end
+
