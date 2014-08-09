@@ -72,7 +72,9 @@ USAGE
       result = []
       @file.lines.each do |l|
         interval = l.start_time - end_time
-        result << l.to_s if interval >= time
+        if interval >= time
+          result << "index: #{l.sequence} time: #{l.time_str} gap: #{interval}"
+        end
         end_time = l.end_time
       end
       puts result.join("\n")

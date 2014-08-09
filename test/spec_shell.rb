@@ -53,16 +53,8 @@ describe SRT::Shell do
 
     it "should scan for lines' interval" do
       expect(STDOUT).to receive(:puts).with(
-<<OUT
-1
-00:03:55,339 --> 00:03:57,236
-I had the craziest dream last night.
-
-4
-00:04:10,566 --> 00:04:12,193
-It was the prologue,
-OUT
-)
+"index: 1 time: 00:03:55,339 --> 00:03:57,236 gap: 235.339\nindex: 4 time: 00:04:10,566 --> 00:04:12,193 gap: 4.01400000000001"
+      )
       @app.eval_command('interval 3000')
     end
 
