@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'srt/shell/version'
 require 'srt'
 require 'srt/patches'
@@ -5,6 +6,8 @@ require 'srt/patches'
 module SRT
   class Shell
     SAVE_HOOK_FILE = ::File.expand_path('~/.srt_shell_hook')
+    BOM_STRING = "\xEF\xBB\xBF"
+    BOM_REGEX = /#{BOM_STRING}/
     USAGE_MSG = <<USAGE
 Usage: #{$0} [SRT_FILENAME]
     Commands:
@@ -21,8 +24,8 @@ Usage: #{$0} [SRT_FILENAME]
 USAGE
 
     def initialize(path = nil, save_hook=SAVE_HOOK_FILE)
-      @file = nil
-      @path = nil
+      @file, @path = nil, nil
+      @bom = false
       load_path(path) if path
       @save_hook = ::File.exists?(save_hook) ? save_hook : nil
     end
@@ -30,7 +33,20 @@ USAGE
     def load_path(path)
       path = ::File.expand_path(path)
       @path = path
-      @file = SRT::File.parse(::File.open(path))
+
+      # Test if file contains BOM
+      ::File.open(path) do |f|
+        lines = f.read.split("\n")
+        unless lines.empty?
+          if lines[0].match(BOM_REGEX)
+            lines[0].sub!(BOM_REGEX, '')
+            @bom = true
+          end
+          @file = SRT::File.parse(lines.join("\n"))
+        else
+          raise ArgumentError, 'Invalid SRT file'
+        end
+      end
       self
     end
 
@@ -107,6 +123,7 @@ USAGE
 
     def save(path=@path)
       ::File.open(path, 'w') do |f|
+        f.print BOM_STRING if @bom
         f.print @file.to_s.split("\n").join("\r\n"), "\r\n\r\n"
       end
       if @save_hook
