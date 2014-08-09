@@ -52,10 +52,13 @@ Forward the given time in ms for lines from index onwards.
 Remove line with the given index
 
 #### save
-Save (overwrite) the SRT file.
+Save (overwrite) the SRT file. You can place an executable file in $HOME/.srt_shell_hook to be executed when 'save' is used.
 
 #### search [word]
 Search for the given word in the SRT file and print out the entries that contain the word.
+
+## Platform
+I've only tested this on Linux because it's the only machine I have.
 
 ## Contributing
 
