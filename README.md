@@ -62,7 +62,7 @@ I've only tested this on Linux because it's the only machine I have.
 
 ## Contributing
 
-1. Fork it ( https://github.com/darkgrin/srt-shell/fork )
+1. Fork it ( https://github.com/skliew/srt-shell/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
