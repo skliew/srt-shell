@@ -6,8 +6,8 @@ require 'srt/shell/version'
 Gem::Specification.new do |spec|
   spec.name          = "srt-shell"
   spec.version       = SRT::Shell::VERSION
-  spec.authors       = ["darkgrin"]
-  spec.email         = ["darkgrin@yahoo.com"]
+  spec.authors       = ["skliew"]
+  spec.email         = ["skliew@gmail.com"]
   spec.summary       = %q{An interactive shell to retime SRT files.}
   spec.description   = %q{}
   spec.homepage      = ""
