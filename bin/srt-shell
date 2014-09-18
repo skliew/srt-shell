@@ -20,6 +20,10 @@ Readline.completion_proc = lambda do |word|
   WORDS.grep(/^#{Regexp.escape(word)}/)
 end
 
+Signal.trap('INT') do
+  puts "Caught SIGINT, exiting..."
+  exit 0
+end
 shell = SRT::Shell.new(ARGV[0])
 
 loop do
