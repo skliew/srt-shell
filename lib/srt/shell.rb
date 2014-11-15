@@ -35,8 +35,8 @@ USAGE
       @path = path
 
       # Test if file contains BOM
-      ::File.open(path) do |f|
-        lines = f.read.split("\n")
+      ::File.open(path) do |file|
+        lines = file.read.split("\n")
         unless lines.empty?
           if lines[0].match(BOM_REGEX)
             lines[0].sub!(BOM_REGEX, '')
@@ -53,22 +53,22 @@ USAGE
     def show(index)
       check_index(index)
       puts @file.lines[index - 1].to_s + "\n"
-    rescue IndexError => e
-      puts e.message
+    rescue IndexError => error
+      puts error.message
     end
 
     def timeshift(index, timecode)
       check_index(index)
       if time = Parser.timespan(timecode)
-        @file.lines[index-1..-1].each do |l|
-          l.start_time += time
-          l.end_time += time
+        @file.lines[index-1..-1].each do |line|
+          line.start_time += time
+          line.end_time += time
         end
       else
         puts "Invalid timeshift input (#{index}, #{timecode})"
       end
-    rescue IndexError => e
-      puts e.message
+    rescue IndexError => error
+      puts error.message
     end
 
     def rewind(index, time)
@@ -86,12 +86,12 @@ USAGE
       end
       end_time = 0
       result = []
-      @file.lines.each do |l|
-        interval = l.start_time - end_time
+      @file.lines.each do |line|
+        interval = line.start_time - end_time
         if interval >= time
-          result << "index: #{l.sequence} time: #{l.time_str} gap: #{interval}"
+          result << "index: #{line.sequence} time: #{line.time_str} gap: #{interval}"
         end
-        end_time = l.end_time
+        end_time = line.end_time
       end
       puts result.join("\n")
     end
@@ -100,18 +100,18 @@ USAGE
       check_index(index)
       index -= 1
       @file.lines.delete_at(index)
-      @file.lines[index..-1].each do |l|
-        l.sequence -= 1
+      @file.lines[index..-1].each do |line|
+        line.sequence -= 1
       end
-    rescue IndexError => e
-      puts e.message
+    rescue IndexError => error
+      puts error.message
     end
 
     def search(term)
       result = []
-      @file.lines.each do |l|
-        if l.text.find { |t| t[term] }
-          result << l.to_s
+      @file.lines.each do |line|
+        if line.text.find { |text| text[term] }
+          result << line.to_s
         end
       end
       puts result.join("\n") + "\n"
@@ -122,9 +122,9 @@ USAGE
     end
 
     def save(path=@path)
-      ::File.open(path, 'w') do |f|
-        f.print BOM_STRING if @bom
-        f.print @file.to_s.split("\n").join("\r\n"), "\r\n\r\n"
+      ::File.open(path, 'w') do |file|
+        file.print BOM_STRING if @bom
+        file.print @file.to_s.split("\n").join("\r\n"), "\r\n\r\n"
       end
       if @save_hook
         output = `sh #{@save_hook}`
