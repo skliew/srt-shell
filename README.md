@@ -33,7 +33,7 @@ help
 #### load '[filename]'
 Load an SRT file.
 
-### exit
+#### exit
 Exit the shell
 
 ###### The following commands can only be used when we already have an SRT file loaded.
