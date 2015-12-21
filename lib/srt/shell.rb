@@ -1,7 +1,6 @@
 # encoding: utf-8
 require 'srt/shell/version'
 require 'srt'
-require 'srt/patches'
 
 module SRT
   class Shell
