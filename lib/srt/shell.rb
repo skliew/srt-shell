@@ -66,6 +66,7 @@ USAGE
       else
         puts "Invalid timeshift input (#{index}, #{timecode})"
       end
+      show(index)
     rescue IndexError => error
       puts error.message
     end
