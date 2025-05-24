@@ -26,7 +26,7 @@ USAGE
       @file, @path = nil, nil
       @bom = false
       load_path(path) if path
-      @save_hook = ::File.exists?(save_hook) ? save_hook : nil
+      @save_hook = ::File.exist?(save_hook) ? save_hook : nil
     end
 
     def load_path(path)
