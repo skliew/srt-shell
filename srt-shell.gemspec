@@ -10,8 +10,9 @@ Gem::Specification.new do |spec|
   spec.email         = ['skliew@gmail.com']
   spec.summary       = %q{An interactive shell to retime SRT files.}
   spec.description   = %q{}
-  spec.homepage      = ''
+  spec.homepage      = 'https://github.com/skliew/srt-shell'
   spec.license       = 'MIT'
+  spec.required_ruby_version = '>= 3.0'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
